@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Box, Button, FormControl, FormLabel, Input, Select, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
 
 const TaskCreation = () => {
   const [automationType, setAutomationType] = useState("");
   const [inputFields, setInputFields] = useState([]);
+  const [steps, setSteps] = useState([]);
+  const [currentStep, setCurrentStep] = useState(null);
 
   const handleAutomationTypeChange = (e) => {
     const selectedType = e.target.value;
@@ -36,33 +38,71 @@ const TaskCreation = () => {
     setInputFields(fields);
   };
 
+  const handleAddStep = () => {
+    if (currentStep) {
+      setSteps([...steps, currentStep]);
+      setCurrentStep(null);
+    }
+  };
+
+  const handleExecuteAutomation = () => {
+    // Logic to execute automation
+    console.log("Executing automation with steps:", steps);
+  };
+
+  const handleSaveTemplate = () => {
+    // Logic to save as template
+    console.log("Saving as template with steps:", steps);
+  };
+
+  const handleSaveExecutable = () => {
+    // Logic to save as executable automation app
+    console.log("Saving as executable automation app with steps:", steps);
+  };
+
   return (
     <Box p={4}>
       <VStack spacing={4} align="stretch">
-        <FormControl id="task-name">
-          <FormLabel>Task Name</FormLabel>
+        <FormControl id="browserCatApiKey">
+          <FormLabel>BrowserCat API Key</FormLabel>
           <Input type="text" />
         </FormControl>
-        <FormControl id="task-details">
-          <FormLabel>Task Details</FormLabel>
-          <Textarea />
+        <FormControl id="automationName">
+          <FormLabel>Automation Name</FormLabel>
+          <Input type="text" />
         </FormControl>
-        <FormControl id="automation-type">
-          <FormLabel>Automation Type</FormLabel>
-          <Select placeholder="Select automation type" onChange={handleAutomationTypeChange}>
-            <option value="browserConnection">Browser Connection</option>
-            <option value="loginDetails">Login Details</option>
-            <option value="navigationAndActions">Navigation and Actions</option>
-            <option value="finalConfirmation">Final Confirmation</option>
+        <FormControl id="automation-method">
+          <FormLabel>Automation Method</FormLabel>
+          <Select placeholder="Select method" onChange={handleAutomationTypeChange}>
+            <option value="askAI">Ask AI</option>
+            <option value="manual">Manual Steps</option>
           </Select>
         </FormControl>
-        {inputFields.map((field) => (
-          <FormControl id={field.id} key={field.id}>
-            <FormLabel>{field.label}</FormLabel>
-            <Input type={field.type} />
-          </FormControl>
-        ))}
-        <Button colorScheme="teal">Create Task</Button>
+        {automationType === "manual" && (
+          <>
+            <FormControl id="manual-steps">
+              <FormLabel>Manual Steps</FormLabel>
+              <Select placeholder="Select command" onChange={(e) => setCurrentStep(e.target.value)}>
+                <option value="url">URL</option>
+                <option value="click">Click</option>
+                <option value="upload">Upload</option>
+                <option value="download">Download</option>
+                <option value="select">Select</option>
+                <option value="textInput">Text Input</option>
+              </Select>
+            </FormControl>
+            {currentStep && (
+              <FormControl id="step-input">
+                <FormLabel>Input for {currentStep}</FormLabel>
+                <Input type="text" />
+                <Button onClick={handleAddStep}>Next Step</Button>
+              </FormControl>
+            )}
+          </>
+        )}
+        <Button colorScheme="teal" onClick={handleExecuteAutomation}>Execute Automation</Button>
+        <Button colorScheme="blue" onClick={handleSaveTemplate}>Save as Template</Button>
+        <Button colorScheme="green" onClick={handleSaveExecutable}>Save as Executable</Button>
       </VStack>
     </Box>
   );
