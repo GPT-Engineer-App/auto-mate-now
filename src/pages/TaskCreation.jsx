@@ -11,15 +11,26 @@ const TaskCreation = () => {
 
     // Define input fields based on selected automation type
     let fields = [];
-    if (selectedType === "type1") {
+    if (selectedType === "browserConnection") {
       fields = [
-        { id: "field1", label: "Field 1", type: "text" },
-        { id: "field2", label: "Field 2", type: "text" },
+        { id: "browserCatApiKey", label: "BrowserCat API Key", type: "text" },
       ];
-    } else if (selectedType === "type2") {
+    } else if (selectedType === "loginDetails") {
       fields = [
-        { id: "field3", label: "Field 3", type: "text" },
-        { id: "field4", label: "Field 4", type: "text" },
+        { id: "loginUrl", label: "URL of the login page", type: "text" },
+        { id: "username", label: "Username", type: "text" },
+        { id: "password", label: "Password", type: "password" },
+      ];
+    } else if (selectedType === "navigationAndActions") {
+      fields = [
+        { id: "postLoginUrl", label: "URL to navigate after login", type: "text" },
+        { id: "buttonSelectors", label: "Button selectors (comma-separated)", type: "text" },
+        { id: "inputSelectorsAndValues", label: "Input selectors and values (comma-separated)", type: "text" },
+        { id: "confirmationSteps", label: "Confirmation steps (comma-separated)", type: "text" },
+      ];
+    } else if (selectedType === "finalConfirmation") {
+      fields = [
+        { id: "successMessageSelector", label: "Success message selector", type: "text" },
       ];
     }
     setInputFields(fields);
@@ -39,8 +50,10 @@ const TaskCreation = () => {
         <FormControl id="automation-type">
           <FormLabel>Automation Type</FormLabel>
           <Select placeholder="Select automation type" onChange={handleAutomationTypeChange}>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
+            <option value="browserConnection">Browser Connection</option>
+            <option value="loginDetails">Login Details</option>
+            <option value="navigationAndActions">Navigation and Actions</option>
+            <option value="finalConfirmation">Final Confirmation</option>
           </Select>
         </FormControl>
         {inputFields.map((field) => (
